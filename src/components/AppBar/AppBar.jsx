@@ -1,5 +1,5 @@
 import { Badge, Box, Button, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
-import ModeSelect from '../ModeSelect'
+import ModeSelect from '../ModeSelect/ModeSelect'
 import AppsIcon from '@mui/icons-material/Apps'
 import trelloIcon from '../../assets/trello.svg'
 import Workspaces from './Menus/Workspaces'
