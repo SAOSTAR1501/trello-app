@@ -1,10 +1,27 @@
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { AddCard, Cloud, ContentCopy, ContentCut, ContentPaste, DeleteForever, DragHandle, ExpandMore } from '@mui/icons-material'
 import { Box, Button, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
 import React from 'react'
+import { mapOrder } from '../../../../../utils/sorts'
 import ListCards from './ListCards/ListCards'
 
+function Column({ column }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition
+  } = useSortable({ id: column._id, data: { ...column } })
 
-function Column() {
+  const dndKitColumnStyle = {
+    // touchAction: 'none', 
+    
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -13,16 +30,22 @@ function Column() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
-    <Box sx={{
-      minWidth: '300px',
-      maxWidth: '300px',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643': '#ebecf0'),
-      ml: 2,
-      borderRadius: '6px',
-      height: 'fit-content',
-      maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
-    }}>
+    <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyle}
+      {...attributes}
+      {...listeners}
+      sx={{
+        minWidth: '300px',
+        maxWidth: '300px',
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643': '#ebecf0'),
+        ml: 2,
+        borderRadius: '6px',
+        height: 'fit-content',
+        maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
+      }}>
       {/* Box column header */}
       <Box sx={{
         height: (theme) => theme.trello.columnHeaderHeight,
@@ -33,7 +56,7 @@ function Column() {
       }}>
         <Typography
           sx={{ fontWeight: 'bold', cursor: 'pointer' }}
-        >Column Title</Typography>
+        >{column?.title}</Typography>
         <Box>
           <Tooltip title="More options">
             <ExpandMore
@@ -100,7 +123,7 @@ function Column() {
         </Box>
       </Box>
       {/* Box column list card */}
-      <ListCards/>
+      <ListCards cards={orderedCards}/>
       {/* Box column footer */}
       <Box sx={{
         height: (theme) => theme.trello.columnFooterHeight,

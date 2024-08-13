@@ -1,5 +1,6 @@
 import { AddToDrive, Bolt, Dashboard, FilterList, PersonAdd, Public } from '@mui/icons-material'
 import { Avatar, AvatarGroup, Box, Button, Chip, Tooltip } from '@mui/material'
+import { capitalizeFirstLetter } from '../../../utils/formatters'
 
 const MENU_STYLES = {
   color: 'white', bgcolor: 'transparent', border: 'none', paddingX: '5px', borderRadius:'4px', '.MuiSvgIcon-root': { color: 'white' },
@@ -8,7 +9,7 @@ const MENU_STYLES = {
   }
 }
 
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       px={2}
@@ -24,9 +25,9 @@ function BoardBar() {
       }}
     >
       <Box sx={{ display:'flex', alignItems:'center', gap:2 }}>
-        <Chip sx={MENU_STYLES} icon={<Dashboard/>} label="Saollo Board"
+        <Chip sx={MENU_STYLES} icon={<Dashboard/>} label={board?.title}
           clickable/>
-        <Chip sx={MENU_STYLES} icon={<Public/>} label="Public workspace"
+        <Chip sx={MENU_STYLES} icon={<Public/>} label={capitalizeFirstLetter(board?.type)}
           clickable/>
         <Chip sx={MENU_STYLES} icon={<AddToDrive/>} label="Add to Google Drive"
           clickable/>
